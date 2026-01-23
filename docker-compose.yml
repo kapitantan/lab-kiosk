@@ -1,0 +1,42 @@
+services:
+  # データベース (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=labstore
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - "5432:5432"
+
+  # バックエンド (Django)
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=labstore
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_HOST=db
+
+  # フロントエンド (React)
+  frontend:
+    build: ./frontend
+    # 開発サーバーをホスト(PC)から見えるように起動
+    command: npm run dev -- --host
+    volumes:
+      - ./frontend:/app
+      # - /app/node_modules # コンテナ内のnode_modulesを守るためのハック
+    ports:
+      - "5173:5173"
+
+volumes:
+  postgres_data:
