@@ -15,7 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('student_id', 'name', 'slack_user_id', 'created_at')
+    list_display = ('student_id', 'name', 'created_at')
     search_fields = ('name', 'student_id')
 
 @admin.register(StockTransaction)

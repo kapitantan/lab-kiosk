@@ -7,7 +7,7 @@ class User(models.Model):
     """
     student_id = models.CharField("学生証番号(バーコード)", max_length=50, unique=True, db_index=True)
     name = models.CharField("氏名", max_length=100)
-    slack_user_id = models.CharField("Slack Member ID", max_length=50, blank=True, null=True, help_text="通知用。Uから始まるID")
+    # slack_user_id = models.CharField("Slack Member ID", max_length=50, blank=True, null=True, help_text="通知用。Uから始まるID")
     created_at = models.DateTimeField("登録日", auto_now_add=True)
 
     def __str__(self):
