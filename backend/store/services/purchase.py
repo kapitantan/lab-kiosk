@@ -11,9 +11,9 @@ class PurchaseError(Exception):
     service層の例外。
     API層はこれを捕まえてHTTPのエラーに変換する。
     """
-    def __init__(self, code: str):
-        self.code = code
-        super().__init__(code)
+    def __init__(self, error_code: str):
+        self.code = error_code
+        super().__init__(error_code)
 
 @dataclass(frozen=True)
 class PurchaseResult:
