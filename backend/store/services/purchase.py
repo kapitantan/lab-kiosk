@@ -3,6 +3,8 @@ from django.db import transaction
 from django.db.models import Sum
 
 from store.models import Product, User, StockTransaction
+from store.services.notification.discord import send
+from django.conf import settings
 
 class PurchaseError(Exception):
     """
@@ -51,6 +53,12 @@ def purchase_one(*, student_id: str, jan_code: str) -> PurchaseResult:
         delta=-1,
         transaction_type="OUT",
     )
+
+    remaining = current - 1
+    threshold = getattr(settings, "LOW_STOCK_THRESHOLD", None)
+    if remaining <= threshold:
+        message = f"在庫低下: {product.name} (JAN:{product.jan_code}) 残り {remaining}"
+        transaction.on_commit(lambda: send(message, username="Lab-Kiosk"))
 
     return PurchaseResult(product=product, remaining=current - 1)
     # return PurchaseResult(product=Product(), remaing=0)
