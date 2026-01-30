@@ -1,0 +1,84 @@
+[
+{
+  "model": "store.user",
+  "pk": 1,
+  "fields": {
+    "student_id": "1",
+    "name": "木田陸渡",
+    "created_at": "2026-01-24T22:45:37.073Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 1,
+  "fields": {
+    "jan_code": "1",
+    "name": "モンスター",
+    "price": 230,
+    "image_url": null,
+    "alert_threshold": 3,
+    "updated_at": "2026-01-24T21:37:34.807Z",
+    "created_at": "2026-01-24T21:36:47.114Z"
+  }
+},
+{
+  "model": "store.stocktransaction",
+  "pk": 1,
+  "fields": {
+    "product": 1,
+    "user": 1,
+    "transaction_type": "RESTOCK",
+    "delta": 10,
+    "description": "",
+    "created_at": "2026-01-24T21:38:27.762Z"
+  }
+},
+{
+  "model": "store.stocktransaction",
+  "pk": 2,
+  "fields": {
+    "product": 1,
+    "user": 1,
+    "transaction_type": "OUT",
+    "delta": -1,
+    "description": "",
+    "created_at": "2026-01-30T16:34:02.828Z"
+  }
+},
+{
+  "model": "store.stocktransaction",
+  "pk": 3,
+  "fields": {
+    "product": 1,
+    "user": 1,
+    "transaction_type": "OUT",
+    "delta": -1,
+    "description": "",
+    "created_at": "2026-01-30T16:34:24.896Z"
+  }
+},
+{
+  "model": "store.stocktransaction",
+  "pk": 4,
+  "fields": {
+    "product": 1,
+    "user": 1,
+    "transaction_type": "OUT",
+    "delta": -1,
+    "description": "",
+    "created_at": "2026-01-30T16:34:29.283Z"
+  }
+},
+{
+  "model": "store.stocktransaction",
+  "pk": 5,
+  "fields": {
+    "product": 1,
+    "user": 1,
+    "transaction_type": "OUT",
+    "delta": -1,
+    "description": "",
+    "created_at": "2026-01-30T16:34:32.934Z"
+  }
+}
+]
