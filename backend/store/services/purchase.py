@@ -51,7 +51,7 @@ def purchase_one(*, student_id: str, jan_code: str) -> PurchaseResult:
         product=product,
         user=user,
         delta=-1,
-        transaction_type="OUT",
+        transaction_type="PURCHASE",
     )
 
     remaining = current - 1
