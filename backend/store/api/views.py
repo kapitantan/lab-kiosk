@@ -36,15 +36,12 @@ class PurchaseView(APIView):
 class ProductRegisterView(APIView):
     """
     商品登録API
-    fields = {
-            "jan_code":,
-            "name":,
-            "price":,
-            "image_url":,
-            "alert_threshold":,
-            "created_at":,
-            "updated_at":,
-    }
+    must_property
+    {
+    "jan_code":,
+    "name":,
+    "price":
+}
     """
 
     # 必要なら認証・権限をここに設定

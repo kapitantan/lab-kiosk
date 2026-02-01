@@ -31,10 +31,6 @@ class ProductRegisterSerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("JANコードは必須です。")
 
-        # 数字縛りしたい場合（必要なら）
-        # if not value.isdigit():
-        #     raise serializers.ValidationError("JANコードは数字のみで指定してください。")
-
         # 登録API用：既存JANがあれば弾く
         if Product.objects.filter(jan_code=value).exists():
             raise serializers.ValidationError("このJANコードの商品は既に登録されています。")
