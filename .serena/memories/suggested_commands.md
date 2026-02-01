@@ -1,0 +1,7 @@
+- Docker起動: `docker compose up --build`
+- Backend単体: `python backend/manage.py runserver 0.0.0.0:8000`
+- Frontend dev: `npm --prefix frontend run dev`
+- Frontend lint: `npm --prefix frontend run lint`
+- Frontend build: `npm --prefix frontend run build`
+- DBマイグレーション: `python backend/manage.py migrate`
+- Django管理ユーザ作成: `python backend/manage.py createsuperuser`

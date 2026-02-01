@@ -1,0 +1,3 @@
+- Purpose: 研究室内の物品購入・在庫管理を半自動化するキオスク型システム（Raspberry Piで運用）。
+- Architecture: Docker Composeでbackend(Django+DRF), frontend(React+Vite), db(PostgreSQL), web(Nginx想定)を構成。
+- Domain: 取引(StockTransaction)を基点に在庫を計算し、購入/入荷/修正履歴を保持。

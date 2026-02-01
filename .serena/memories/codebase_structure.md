@@ -1,0 +1,4 @@
+- Root: docker-compose.yml, backend/, frontend/, docs/。
+- backend/: Djangoプロジェクト。config/にsettings/urls、store/にmodels, api, services, urls。
+- frontend/: Vite + React。package.jsonにdev/build/lint/preview。
+- docs/: system designなど設計資料。
