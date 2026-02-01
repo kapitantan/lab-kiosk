@@ -61,7 +61,10 @@ class StockTransactionViewSet(
 class PurchaseView(APIView):
     """
     商品購入API
-    student_id,jan_code
+    {
+    "student_id":,
+    "jan_code":
+    }
     """
     def post(self, request):
         serializer = PurchaseRequestSerializer(data=request.data)
@@ -72,6 +75,7 @@ class PurchaseView(APIView):
                 student_id=serializer.validated_data["student_id"],
                 jan_code=serializer.validated_data["jan_code"],
             )
+            print({'product':result.product.name,'remaining':result.remaining},flush=True)
         except PurchaseError as e:
             if e.code in ("user_not_found", "product_not_found"):
                 return Response({"error": e.code}, status=status.HTTP_404_NOT_FOUND)
@@ -80,7 +84,8 @@ class PurchaseView(APIView):
             return Response({"error": "unknown"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return Response(
-            {'ok'},
+            {'product':result.product.name,'remaining':result.remaining},
+            # {'ok'},
             status=status.HTTP_200_OK,
         )   
 

@@ -59,7 +59,7 @@ class StockTransaction(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="amendments",
+        related_name="amendments", # 逆アクセス用、stocktransaction.amendments.all()とすると訂正を全て取得できる
         verbose_name="修正対象",
     )
     
