@@ -1,0 +1,4 @@
+- Python: Django/DRFの標準的な構成。現状は型ヒント最小限、docstringは簡潔。
+- API: DRFのAPIViewを利用（store/api/views.py）。
+- モデル: snake_case、verbose_nameに日本語、created_at/updated_atあり。
+- フロント: Vite/React、ESLint設定はpackage.json通り。

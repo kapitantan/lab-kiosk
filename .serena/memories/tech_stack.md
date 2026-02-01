@@ -1,0 +1,4 @@
+- Backend: Python, Django 5.x, Django REST Framework, django-cors-headers。
+- DB: PostgreSQL (docker-composeでpostgres:15-alpine)。
+- Frontend: React 19 + Vite + ESLint。
+- Infra: Docker Compose。

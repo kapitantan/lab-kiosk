@@ -1,0 +1,3 @@
+- 必要に応じて: `docker compose up --build` で動作確認。
+- Frontend変更時: `npm --prefix frontend run lint`。
+- Backend変更時: `python backend/manage.py test`（テストがある場合）。
