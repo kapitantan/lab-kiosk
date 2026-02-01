@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from store.models import Product
+from store.models import Product, StockTransaction
 
 class PurchaseRequestSerializer(serializers.Serializer):
     student_id = serializers.CharField()
@@ -60,3 +60,19 @@ class ProductRegisterSerializer(serializers.ModelSerializer):
         # 例：高額商品で alert_threshold が 0 は変じゃない？など
         # 今回は特に制約なし
         return attrs
+
+
+class StockTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StockTransaction
+        fields = [
+            "id",
+            "product",
+            "user",
+            "transaction_type",
+            "delta",
+            "description",
+            "amended_of",
+            "created_at",
+        ]
+        read_only_fields = fields

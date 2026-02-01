@@ -54,6 +54,14 @@ class StockTransaction(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='transactions', verbose_name="商品")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="利用者")
+    amended_of = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="amendments",
+        verbose_name="修正対象",
+    )
     
     transaction_type = models.CharField("変動タイプ", max_length=20, choices=TYPE_CHOICES)
     delta = models.IntegerField("変動数", help_text="購入ならマイナス、入荷ならプラスの値")

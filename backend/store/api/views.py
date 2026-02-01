@@ -1,10 +1,62 @@
-from rest_framework.views import APIView
+from django.db import transaction
+from django.shortcuts import get_object_or_404
+from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.views import APIView
 
-from store.api.serializers import PurchaseRequestSerializer, ProductRegisterSerializer
+from store.api.serializers import (
+    ProductRegisterSerializer,
+    PurchaseRequestSerializer,
+    StockTransactionSerializer,
+)
+from store.models import StockTransaction
 from store.services.purchase import purchase_one,PurchaseError
 from store.services.register.product import register_product
+
+class StockTransactionViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = (
+        StockTransaction.objects
+        .select_related("product", "user", "amended_of")
+        .order_by("-created_at")
+    )
+    serializer_class = StockTransactionSerializer
+
+    @action(detail=True, methods=["post"], url_path="amend")
+    def amend(self, request, pk=None):
+        with transaction.atomic():
+            tx = get_object_or_404(
+                StockTransaction.objects.select_for_update(),
+                pk=pk,
+            )
+
+            if tx.transaction_type == "CORRECTION":
+                return Response(
+                    {"error": "cannot_amend_correction"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if tx.amendments.exists():
+                return Response(
+                    {"error": "already_amended"},
+                    status=status.HTTP_409_CONFLICT,
+                )
+
+            amend = StockTransaction.objects.create(
+                product=tx.product,
+                user=tx.user,
+                transaction_type="CORRECTION",
+                delta=-tx.delta,
+                description=f"amend of {tx.id}",
+                amended_of=tx,
+            )
+
+        serializer = self.get_serializer(amend)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class PurchaseView(APIView):
     """
