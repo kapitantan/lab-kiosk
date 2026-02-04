@@ -14,6 +14,7 @@ from store.api.serializers import (
     ProductRegisterSerializer,
     PurchaseRequestSerializer,
     RestockImportRequestSerializer,
+    RestockRequestSerializer,
     StockTransactionSerializer,
 )
 from store.models import Product, StockTransaction
@@ -31,6 +32,37 @@ class StockTransactionViewSet(
         .order_by("-created_at")
     )
     serializer_class = StockTransactionSerializer
+
+    @action(detail=False, methods=["post"], url_path="restock")
+    def restock(self, request):
+        serializer = RestockRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        jan_code = serializer.validated_data["jan_code"].strip()
+        quantity = serializer.validated_data["quantity"]
+        unit_cost = serializer.validated_data.get("unit_cost")
+        description = serializer.validated_data.get("description", "")
+
+        if not jan_code:
+            return Response(
+                {"error": "invalid_jan_code"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        with transaction.atomic():
+            product = get_object_or_404(
+                Product.objects.select_for_update(),
+                jan_code=jan_code,
+            )
+            tx = StockTransaction.objects.create(
+                product=product,
+                transaction_type="RESTOCK",
+                delta=quantity,
+                unit_cost=unit_cost,
+                description=description,
+            )
+
+        return Response(StockTransactionSerializer(tx).data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["post"], url_path="amend")
     def amend(self, request, pk=None):

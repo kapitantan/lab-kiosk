@@ -81,3 +81,10 @@ class StockTransactionSerializer(serializers.ModelSerializer):
 
 class RestockImportRequestSerializer(serializers.Serializer):
     file = serializers.FileField()
+
+
+class RestockRequestSerializer(serializers.Serializer):
+    jan_code = serializers.CharField()
+    quantity = serializers.IntegerField(min_value=0)
+    unit_cost = serializers.IntegerField(required=False, allow_null=True)
+    description = serializers.CharField(required=False, allow_blank=True)
