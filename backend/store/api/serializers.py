@@ -71,8 +71,20 @@ class StockTransactionSerializer(serializers.ModelSerializer):
             "user",
             "transaction_type",
             "delta",
+            "unit_cost",
             "description",
             "amended_of",
             "created_at",
         ]
         read_only_fields = fields
+
+
+class RestockImportRequestSerializer(serializers.Serializer):
+    file = serializers.FileField()
+
+
+class RestockRequestSerializer(serializers.Serializer):
+    jan_code = serializers.CharField()
+    quantity = serializers.IntegerField(min_value=0)
+    unit_cost = serializers.IntegerField(required=False, allow_null=True)
+    description = serializers.CharField(required=False, allow_blank=True)
