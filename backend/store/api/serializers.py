@@ -77,3 +77,7 @@ class StockTransactionSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = fields
+
+
+class RestockImportRequestSerializer(serializers.Serializer):
+    file = serializers.FileField()

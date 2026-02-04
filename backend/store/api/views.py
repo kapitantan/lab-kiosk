@@ -5,6 +5,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,6 +13,7 @@ from rest_framework.views import APIView
 from store.api.serializers import (
     ProductRegisterSerializer,
     PurchaseRequestSerializer,
+    RestockImportRequestSerializer,
     StockTransactionSerializer,
 )
 from store.models import Product, StockTransaction
@@ -122,12 +124,13 @@ class ProductRegisterView(APIView):
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class RestockImportView(APIView):
+class RestockImportView(GenericAPIView):
     """
     CSV一括入荷API
     multipart/form-data で file フィールドに CSV を送る
     """
     parser_classes = (MultiPartParser, FormParser)
+    serializer_class = RestockImportRequestSerializer
 
     ALLOWED_CONTENT_TYPES = {
         "text/csv",
@@ -137,12 +140,9 @@ class RestockImportView(APIView):
     }
 
     def post(self, request, *args, **kwargs):
-        upload = request.FILES.get("file")
-        if upload is None:
-            return Response(
-                {"status": "error", "message": "file is required"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        upload = serializer.validated_data["file"]
 
         if (
             upload.content_type
