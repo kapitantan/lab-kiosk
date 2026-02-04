@@ -5,6 +5,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -126,6 +127,7 @@ class RestockImportView(APIView):
     CSV一括入荷API
     multipart/form-data で file フィールドに CSV を送る
     """
+    parser_classes = (MultiPartParser, FormParser)
 
     ALLOWED_CONTENT_TYPES = {
         "text/csv",
