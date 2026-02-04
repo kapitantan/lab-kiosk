@@ -65,6 +65,7 @@ class StockTransaction(models.Model):
     
     transaction_type = models.CharField("変動タイプ", max_length=20, choices=TYPE_CHOICES)
     delta = models.IntegerField("変動数", help_text="購入ならマイナス、入荷ならプラスの値")
+    unit_cost = models.IntegerField("仕入単価", null=True, blank=True)
     
     description = models.CharField("備考", max_length=200, blank=True)
     created_at = models.DateTimeField("日時", auto_now_add=True, db_index=True)

@@ -71,6 +71,7 @@ class StockTransactionSerializer(serializers.ModelSerializer):
             "user",
             "transaction_type",
             "delta",
+            "unit_cost",
             "description",
             "amended_of",
             "created_at",
