@@ -204,6 +204,20 @@ const apiPostJson = async (path, body) => {
   return data
 }
 
+const apiGetJson = async (path) => {
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: 'GET',
+    credentials: 'include',
+  })
+
+  const data = await response.json().catch(() => ({}))
+  if (!response.ok) {
+    const message = data.error || data.message || 'request_failed'
+    throw new Error(message)
+  }
+  return data
+}
+
 const UserRegistration = () => (
   <div className="stack">
     <Section title="ユーザー登録">
@@ -456,6 +470,27 @@ const Correction = () => {
   const [transactionId, setTransactionId] = useState('')
   const [status, setStatus] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [history, setHistory] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [historyError, setHistoryError] = useState(null)
+
+  const loadHistory = async () => {
+    setLoading(true)
+    setHistoryError(null)
+    try {
+      const data = await apiGetJson('/transactions')
+      const items = Array.isArray(data.results) ? data.results : data
+      setHistory(Array.isArray(items) ? items : [])
+    } catch (error) {
+      setHistoryError(`エラー: ${error.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadHistory()
+  }, [])
 
   const onSubmit = async () => {
     if (!transactionId) {
@@ -491,6 +526,41 @@ const Correction = () => {
             placeholder="transaction id"
           />
         </label>
+      </Section>
+      <Section title="取引履歴">
+        <div className="history-block">
+          <div className="history-header">
+            <button className="ghost" onClick={loadHistory} disabled={loading}>
+              更新
+            </button>
+            {loading && <span className="history-meta">読み込み中…</span>}
+            {historyError && <span className="history-error">{historyError}</span>}
+          </div>
+          <div className="history-table">
+            <div className="history-row head">
+              <span>ID</span>
+              <span>商品</span>
+              <span>利用者</span>
+              <span>種別</span>
+              <span>数量</span>
+              <span>日時</span>
+            </div>
+            {history.length === 0 ? (
+              <div className="history-empty">履歴がありません。</div>
+            ) : (
+              history.map((item) => (
+                <div key={item.id} className="history-row">
+                  <span>{item.id}</span>
+                  <span>{item.product ?? '-'}</span>
+                  <span>{item.user ?? '-'}</span>
+                  <span>{item.transaction_type}</span>
+                  <span>{item.delta}</span>
+                  <span>{new Date(item.created_at).toLocaleString('ja-JP')}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </Section>
       {status && <StatusBadge status={status} />}
       <div className="actions">
