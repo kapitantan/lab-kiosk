@@ -2,7 +2,9 @@ import csv
 import io
 
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
@@ -20,6 +22,10 @@ from store.api.serializers import (
 from store.models import Product, StockTransaction
 from store.services.purchase import purchase_one,PurchaseError
 from store.services.register.product import register_product
+
+@ensure_csrf_cookie
+def csrf(request):
+    return JsonResponse({"status": "ok"})
 
 class StockTransactionViewSet(
     mixins.ListModelMixin,
