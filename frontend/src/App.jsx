@@ -309,8 +309,8 @@ const ProductEntry = () => {
   const [csvFile, setCsvFile] = useState(null)
 
   const onSubmit = async () => {
-    if (!studentId || !janCode) {
-      setStatus({ type: 'error', message: '学生証番号とJANコードは必須です。' })
+    if (!janCode || !name || price === '') {
+      setStatus({ type: 'error', message: 'JANコード・商品名・単価は必須です。' })
       return
     }
     setBusy(true)
@@ -369,6 +369,15 @@ const ProductEntry = () => {
 
       const data = await response.json().catch(() => ({}))
       if (!response.ok) {
+        const errors = Array.isArray(data.errors) ? data.errors : []
+        if (errors.length > 0) {
+          const head = errors
+            .slice(0, 3)
+            .map((err) => `行${err.row}: ${err.message}`)
+            .join(' / ')
+          const more = errors.length > 3 ? ` ほか${errors.length - 3}件` : ''
+          throw new Error(`${head}${more}`)
+        }
         const message = data.message || data.error || 'upload_failed'
         throw new Error(message)
       }
