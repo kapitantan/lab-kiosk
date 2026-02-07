@@ -548,16 +548,24 @@ const Correction = () => {
             {history.length === 0 ? (
               <div className="history-empty">履歴がありません。</div>
             ) : (
-              history.map((item) => (
-                <div key={item.id} className="history-row">
-                  <span>{item.id}</span>
-                  <span>{item.product ?? '-'}</span>
-                  <span>{item.user ?? '-'}</span>
-                  <span>{item.transaction_type}</span>
-                  <span>{item.delta}</span>
-                  <span>{new Date(item.created_at).toLocaleString('ja-JP')}</span>
-                </div>
-              ))
+              history.map((item) => {
+                const isSelected = String(item.id) === String(transactionId)
+                return (
+                  <button
+                    type="button"
+                    key={item.id}
+                    className={`history-row selectable ${isSelected ? 'selected' : ''}`}
+                    onClick={() => setTransactionId(String(item.id))}
+                  >
+                    <span>{item.id}</span>
+                    <span>{item.product ?? '-'}</span>
+                    <span>{item.user ?? '-'}</span>
+                    <span>{item.transaction_type}</span>
+                    <span>{item.delta}</span>
+                    <span>{new Date(item.created_at).toLocaleString('ja-JP')}</span>
+                  </button>
+                )
+              })
             )}
           </div>
         </div>
