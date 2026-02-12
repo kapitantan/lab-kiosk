@@ -1,5 +1,15 @@
-FROM node:20-slim
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
-# こちらもコードはマウントするので初期設定のみ
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM nginx:1.27-alpine
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80

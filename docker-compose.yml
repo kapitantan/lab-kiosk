@@ -32,13 +32,8 @@ services:
   # フロントエンド (React)
   frontend:
     build: ./frontend
-    # 開発サーバーをホスト(PC)から見えるように起動
-    command: npm run dev -- --host
-    volumes:
-      - ./frontend:/app
-      # - /app/node_modules # コンテナ内のnode_modulesを守るためのハック
     ports:
-      - "5173:5173"
+      - "5173:80"
 
 volumes:
   postgres_data:
