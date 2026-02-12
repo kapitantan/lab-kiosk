@@ -1,4 +1,6 @@
 # lab-kiosk
+## 実機環境
+- Raspberry Pi 3 Model B 
 ## clone後(ブランチ新規作成後)に必要な操作
 - .envの作成
 ```
