@@ -79,6 +79,12 @@ const formatTime = (value) =>
 function App() {
   const [page, setPage] = useState(PAGES.home)
   const [now, setNow] = useState(() => new Date())
+  const isLowPowerDevice = useMemo(() => {
+    if (typeof navigator === 'undefined') return false
+    const cpuCores = navigator.hardwareConcurrency ?? 0
+    const deviceMemory = navigator.deviceMemory ?? 0
+    return (cpuCores > 0 && cpuCores <= 4) || (deviceMemory > 0 && deviceMemory <= 2)
+  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000 * 30)
@@ -93,7 +99,7 @@ function App() {
   const timeLabel = useMemo(() => formatTime(now), [now])
 
   return (
-    <div className="app">
+    <div className={`app${isLowPowerDevice ? ' app-lite' : ''}`}>
       <header className="topbar">
         <div className="brand">
           <div className="brand-mark">KM</div>

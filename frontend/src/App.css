@@ -483,3 +483,41 @@
     grid-auto-rows: auto;
   }
 }
+
+/* Raspberry Pi 3 などの低スペック端末向け: 再描画コストを抑える */
+.app-lite {
+  background: linear-gradient(135deg, #0a1220 0%, #0e1728 55%, #0b1b2a 100%);
+}
+
+.app-lite .status-dot,
+.app-lite .card,
+.app-lite .tile,
+.app-lite .history-row.selected {
+  box-shadow: none;
+}
+
+.app-lite .tile::after {
+  display: none;
+}
+
+.app-lite .tile,
+.app-lite .history-row.selectable {
+  transition: background 0.12s linear;
+}
+
+.app-lite .tile:hover,
+.app-lite .history-row.selectable:hover {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .history-row.selectable {
+    transition: none;
+  }
+
+  .tile:hover,
+  .history-row.selectable:hover {
+    transform: none;
+  }
+}
